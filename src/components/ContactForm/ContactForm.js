@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './ContactForm.module.css';
+import shortid from 'shortid';
 
 class ContactForm extends Component {
   static propTypes = {
@@ -21,6 +22,7 @@ class ContactForm extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
+    const contactId = shortid.generate();
     const { name, number } = this.state;
     const { existingContactsName } = this.props;
     const reviewExistingContactsNames = existingContactsName().includes(
@@ -34,7 +36,11 @@ class ContactForm extends Component {
     } else if (name.length < 3) {
       alert('Name should have more than 3 letters');
     } else {
-      this.props.onSubmit(this.state);
+      this.props.onSubmit({
+        name: name,
+        number: number,
+        id: contactId,
+      });
     }
 
     this.reset();
